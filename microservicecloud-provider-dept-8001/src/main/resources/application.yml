@@ -1,0 +1,42 @@
+server:
+  port: 8001
+  
+mybatis:
+  config-location: classpath:mybatis/mybatis.cfg.xml        # mybatis配置文件所在路径
+  type-aliases-package: com.atguigu.springcloud.entities    # 所有Entity别名类所在包
+  mapper-locations:
+  - classpath:mybatis/mapper/**/*.xml                       # mapper映射文件
+    
+spring:
+   application:
+    name: microservicecloud-dept  #注册进服务中心后的服务名字，Eureka会将其转为大写
+   datasource:
+    type: com.alibaba.druid.pool.DruidDataSource            # 当前数据源操作类型
+    driver-class-name: org.gjt.mm.mysql.Driver              # mysql驱动包
+    url: jdbc:mysql://localhost:3306/cloudDB01              # 数据库名称
+    username: root
+    password: 123456
+    dbcp2:
+      min-idle: 5                                           # 数据库连接池的最小维持连接数
+      initial-size: 5                                       # 初始化连接数
+      max-total: 5                                          # 最大连接数
+      max-wait-millis: 200                                  # 等待连接获取的最大超时时间
+      
+eureka:
+  client: #客户端注册进eureka服务列表内
+    service-url: 
+      #Eureka服务端的地址
+      #defaultZone: http://localhost:7001/eureka
+       defaultZone: http://eureka7001.com:7001/eureka/,http://eureka7002.com:7002/eureka/,http://eureka7003.com:7003/eureka/      
+  instance:
+    instance-id: microservicecloud-dept8001   #当前微服务在Eureka页面中显示的访问超链接名
+    prefer-ip-address: true     #悬停在访问超链接上可以显示IP地址
+         
+#指定点击Eureka页面中的微服务访问超链接后显示的info信息 
+#这需要在当前微服务工程中引入spring-boot-starter-actuator依赖，并再pom.xml中开启当前资源文件的过滤来解析两个$之间的内容
+info: 
+  app.name: atguigu-microservicecloud
+  company.name: www.atguigu.com
+  build.artifactId: $project.artifactId$
+  build.version: $project.version$
+

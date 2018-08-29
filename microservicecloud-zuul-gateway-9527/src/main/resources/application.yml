@@ -1,0 +1,35 @@
+server: 
+  port: 9527
+ 
+spring: 
+  application:
+    name: microservicecloud-zuul-gateway
+ 
+eureka: 
+  client: 
+    service-url: 
+      defaultZone: http://eureka7001.com:7001/eureka,http://eureka7002.com:7002/eureka,http://eureka7003.com:7003/eureka  
+  instance:
+    instance-id: gateway-9527.com
+    prefer-ip-address: true 
+ 
+ 
+zuul: 
+  #设置统一的前缀，在访问地址上就需要加上这个前缀
+  prefix: /atguigu
+  #忽略原真实服务名，防止使用服务的真实名称来访问服务
+  ignored-services: "*"
+  #配置路由的映射地址，防止暴露服务的真实名称
+  #这里将microservicecloud-dept服务映射为了mydept
+  #假设在映射前是通过http://${zuul的域名}/microservicecloud-dept/depts/1来访问
+  #那么在映射后则是通过http://${zuul的域名}/mydept/depts/1来访问
+  routes: 
+    mydept.serviceId: microservicecloud-dept
+    mydept.path: /mydept/**
+ 
+info:
+  app.name: atguigu-microcloud
+  company.name: www.atguigu.com
+  build.artifactId: $project.artifactId$
+  build.version: $project.version$
+
